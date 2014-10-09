@@ -1,3 +1,51 @@
+# Clustering Clinic Presentation using Reveal.js
+
+* Put together a quick prezzy with simple overview of what we did.
+* Directly below is notes from what we did:
+
+### Clustering Clinic
+
+**Our Process**
+
+- 1st Viewed Opscenter and the cluster topology
+- Ran Jmeter
+- Poked around in Cassandra.yaml and found that the seed nodes were set differently
+  * BUT, this only matters when you bootstrap a node
+- Checked Cassandra log
+- Ran Cassandra in the foreground
+- Saw a storage error
+- Down node has hugefile (no space left out on device)
+    * Steve's advice was to use cassandra as a service
+    * If used as root, you must chown all the files
+    * Red flag in our case: Commit failure policy is stopped--> sudo chown -R cassandra:cassandra /var/lib/cassandra
+- Was able to startup Cassandra on the downed node (node 2)
+- Datacenter 2 only showed 6 of 8 agents so checked to see datastax agent was running (restarted in case it wasn't running).
+- If that doesn't work check the agents log
+- Nodetool status says everything is up but Opscenter thinks that node 0 is starting with a load of 1.6 (wrong)
+- Checked agent log: says Opscenter does not exist for Node 0 but it says its there in CQLSH
+- On opcenter tried to fix w/Install Node Agents for Node 0 and Node 3 as indicated by Opscenter
+- The fix didn't help
+- Checking out agent log again returned error: downed host--retry service
+- Tried checking out the agent config (compare working and not working config files) In /etc/datastax-agent-env.sh
+- Let's give one more gander to Cassandra yaml: AHA! EC2Snitch and should be Ec2MultiRegion Snitch
+- Work smarter not harder: So we got smart, started looking at the diffs.
+- Heap size was commented out everywhere but 2 places: 1G and 4G
+- Bootstrap false
+- Replication factor is 6: Quorum should have been local
+- Should be using token-aware round robin
+
+**Takeaways**
+- 1st step check the system environment (do the df)
+- Don't run as root
+- Node 1 wasn't using the right snitch
+- Node 1 agent had a duplicate IP
+- Check in Multi-Region env. Check all 3 IPs
+- Run the benchmark
+- 2 user workstation /etc/hosts was different in the 2
+
+
+## reveal.js README.md is below
+
 # reveal.js [![Build Status](https://travis-ci.org/hakimel/reveal.js.png?branch=master)](https://travis-ci.org/hakimel/reveal.js)
 
 A framework for easily creating beautiful presentations using HTML. [Check out the live demo](http://lab.hakim.se/reveal-js/).
