@@ -36,12 +36,15 @@
 
 **Takeaways**
 - 1st step check the system environment (do the df)
-- Don't run as root
+- Don't run Cassandra as root
 - Node 1 wasn't using the right snitch
 - Node 1 agent had a duplicate IP
-- Check in Multi-Region env. Check all 3 IPs
+- Check in Multi-Region env. Check all 3 IPs: agent_rpc_broadcast_address
+stomp_interface, agent_rpc_interface
 - Run the benchmark
 - 2 user workstation /etc/hosts was different in the 2
+- Check working vs. non-working files
+
 
 
 ## reveal.js README.md is below
