@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Clustering Clinic</title>
+
+		<meta name="description" content="Clusterf*ck">
+		<meta name="author" content="Dani Traphagen Michael Perrone and Sebastian Estevez">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/theme/default.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+		<script>
+			if( window.location.search.match( /print-pdf/gi ) ) {
+				var link = document.createElement( 'link' );
+				link.rel = 'stylesheet';
+				link.type = 'text/css';
+				link.href = 'css/print/pdf.css';
+				document.getElementsByTagName( 'head' )[0].appendChild( link );
+			}
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h1>Clusterf*ck</h1>
+					<h3>The Clustering Clinc</h3>
+					<p>
+						<small>Presented by <a href="http://dtrapezoid.com">Dani Traphagen</a> / <a href="http://twitter.com/dtrapezoid">@dtrapezoid</a> Michael Perrone & Sebastian Estevez / <a href="http://twitter.com/syllogistic">@syllogistic</a></small>
+					</p>
+				</section>
+
+				<section>
+					<h2>Introduction</h2>
+					<p>
+						There were some serious issues with this cluster of pain. We rolled up our sleeves and got down to bidness, trouble shooting this hot mess.
+					</p>
+
+					<aside class="notes">
+						Oh hey, these are some notes. They'll be hidden in your presentation, but you can see them if you open the speaker notes window (hit 's' on your keyboard).
+					</aside>
+				</section>
+
+				<!-- Example of nested vertical slides -->
+				<section>
+					<section>
+						<h2>Arriving at AHA MOMENT #1</h2>
+						<p>
+							We 1st Viewed Opscenter and the cluster topology
+                <a href="#" class="navigate-down">next we...</a>
+						</p>
+						<a href="#" class="image navigate-down">
+							<img width="300" height="238" src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" alt="Down arrow">
+						</a>
+					</section>
+
+					<section>
+						<h2>Ran Jmeter</h2>
+						<p>
+							Just to check we could fire it up.
+						</p>
+					</section>
+
+					<section>
+						<h2>Cassandra.yaml</h2>
+						<p>
+							Seed nodes weren't set the same, but that wasn't it, because that only matters during bootstrapping.
+						</p>
+						<a class="test" href="https://wideworldofnovelwriting.files.wordpress.com/2011/01/redherring.jpg">
+							<img width="400" height="326" src="https://wideworldofnovelwriting.files.wordpress.com/2011/01/redherring.jpg" alt="Red Herring">
+						</a>
+					</section>
+
+					<section>
+						<h2>When in doubt, CHECK ALL THE FILES!</h2>
+						<p>
+							Checked Cassandra log and ran Cassandra in the foreground. AHA HUGEFILE is HUGE!
+							</p>
+						<a href="#/2" class="image">
+							<img width="200" height="238" src="http://2.bp.blogspot.com/-6DxX7OKwbD0/UH14y2XYIyI/AAAAAAAAAEM/jNLgCUc_DVQ/s1600/eureka.jpg" alt="lightbulb"
+						</a>
+					</section>
+				</section>
+
+				<section>
+					<h2>When we got the down node up:</h2>
+					<p>
+						Datacenter 2 only showed 6 of 8 agents so checked to see datastax agent was running (restarted in case it wasn't running).  <a href="http://slid.es" target="_blank">http://slid.es</a>.
+					</p>
+				</section>
+
+				<section>
+					<h2>Check moar things!</h2>
+					<ul>
+						<li>Check DataStax agent log</li>
+						<li>Nodetool Status</li>
+						<li>Agent Config</li>
+						<li>Cassandra.yaml</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Arriving at AHA MOMENT #1</h2>
+					<ul>
+						<li>The snitch is a lie</li>
+						<li>Was set as Ec2Snitch</li>
+						<li>Should have been Ec2MultiRegion</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Our final solo AHA Moment #3</h2>
+					<ul>
+						<li>Heap size is a lie</li>
+						<li>All the heaps were commented out</li>
+						<li>Except for 2 which were different values</li>
+					</ul>
+				</section>
+			</section>
+
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'solarized', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Parallax scrolling
+				// parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+				// parallaxBackgroundSize: '2100px 900px',
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
